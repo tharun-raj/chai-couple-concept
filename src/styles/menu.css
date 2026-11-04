@@ -1,0 +1,143 @@
+/* Menu: category tabs with a clip-path highlight, and a card grid. */
+
+.menu__tabs {
+  padding-bottom: 28px;
+}
+.tabs {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--surface);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+.tabs__inner {
+  position: relative;
+  display: inline-flex;
+}
+.tab,
+.tabs__on span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 clamp(14px, 3.4vw, 26px);
+  font: 600 0.9375rem/1 var(--font-body);
+  white-space: nowrap;
+}
+.tab {
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--fg);
+  position: relative;
+  z-index: 1;
+}
+.tab:active {
+  transform: scale(0.97);
+  transition: transform 120ms var(--ease-out);
+}
+/* The same labels again, in the active colours, revealed by clip-path. This is what makes the
+   colour change run across the label together with the pill instead of fading separately. */
+.tabs:not(.is-ready) .tabs__on {
+  display: none;
+}
+.tabs:not(.is-ready) .tab[aria-selected='true'] {
+  background: var(--espresso);
+  color: var(--cream);
+}
+.tabs__on {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  background: var(--espresso);
+  color: var(--cream);
+  border-radius: 999px;
+  clip-path: inset(0 100% 0 0 round 999px);
+  transition: clip-path 220ms var(--ease-out);
+  pointer-events: none;
+  z-index: 2;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tabs__on {
+    transition: none;
+  }
+}
+
+.menu__panels {
+  padding-block: 12px clamp(72px, 10vw, 160px);
+}
+.menu--tabs .menu-panel__title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.menu-panel[hidden] {
+  display: none;
+}
+.menu-panel__title {
+  margin-bottom: 24px;
+}
+.menu-panel + .menu-panel {
+  margin-top: clamp(56px, 8vw, 112px);
+}
+.menu--tabs .menu-panel + .menu-panel {
+  margin-top: 0;
+}
+
+.menu-grid {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1100px) {
+  .menu-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 12px;
+  min-height: 248px;
+  padding: clamp(22px, 2.4vw, 30px);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--espresso);
+  opacity: 0;
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover::after {
+    opacity: 0.05;
+  }
+}
+.card__name {
+  font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem);
+}
+.card__desc {
+  color: var(--fg-soft);
+}
+.card__price {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

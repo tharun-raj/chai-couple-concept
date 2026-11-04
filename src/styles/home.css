@@ -1,0 +1,381 @@
+/* Home: full-bleed photo hero, signature tiles, story teaser. */
+
+/* ------------------------------------------------------------ hero */
+.hero {
+  position: relative;
+  isolation: isolate;
+  margin-top: calc(var(--header-h) * -1); /* main already pads for the header */
+  padding-top: var(--header-h);
+  overflow: clip;
+}
+/* Phones and tablets: photo edge to edge, words underneath. */
+.hero__visual {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface);
+}
+@media (min-width: 640px) {
+  .hero__visual {
+    aspect-ratio: 16 / 10;
+  }
+}
+.hero__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 62%;
+}
+.hero__veil {
+  display: none;
+}
+.hero__grid {
+  padding-block: clamp(28px, 5vw, 48px) clamp(44px, 7vw, 72px);
+}
+.hero__text {
+  display: grid;
+  justify-items: start;
+}
+
+/* Desktop: the photo is the hero; a flat-to-clear scrim keeps the headline readable over the dark chair and wall. */
+@media (min-width: 900px) {
+  .hero__visual {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    aspect-ratio: auto;
+  }
+  .hero__img {
+    object-position: 68% 55%;
+  }
+  .hero__veil {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--espresso) 95%, transparent) 0%,
+      color-mix(in srgb, var(--espresso) 82%, transparent) 36%,
+      color-mix(in srgb, var(--espresso) 14%, transparent) 72%,
+      transparent 100%
+    );
+  }
+  .hero__grid {
+    display: grid;
+    align-content: center;
+    min-height: min(100svh, 920px);
+    padding-block: calc(var(--header-h) + 24px) 72px;
+  }
+  .hero__text {
+    max-width: 46rem;
+  }
+}
+
+.hero__title {
+  font-size: clamp(2.5rem, 10.4vw, 4.5rem);
+}
+@media (min-width: 900px) {
+  .hero__title {
+    font-size: min(7vw, 6.75rem);
+  }
+}
+.hero__title .line {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.hero__title .line > span {
+  display: block;
+}
+.hero__lede {
+  max-width: 22em;
+  margin-top: clamp(18px, 2.4vw, 32px);
+  font-size: var(--t-m);
+  line-height: 1.45;
+  color: var(--fg-soft);
+}
+@media (min-width: 900px) {
+  .hero__lede {
+    color: var(--cream);
+  }
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: clamp(22px, 3vw, 36px);
+}
+.hero .status {
+  margin-top: 18px;
+  color: var(--fg-soft);
+}
+@media (min-width: 900px) {
+  .hero .status {
+    color: var(--cream);
+  }
+}
+
+/* Page-load intro: masked line Reveal, Stagger of the supporting parts, photo settles in. */
+.hero__title .line > span {
+  transition: transform 760ms var(--ease-out);
+}
+.hero__title .line:nth-child(2) > span {
+  transition-delay: 90ms;
+}
+[data-intro] {
+  transition: opacity 520ms var(--ease-out), transform 520ms var(--ease-out);
+}
+.hero__text > :nth-child(2) {
+  transition-delay: 220ms;
+}
+.hero__text > :nth-child(3) {
+  transition-delay: 320ms;
+}
+.hero__text > :nth-child(4) {
+  transition-delay: 420ms;
+}
+.hero__visual {
+  transition: opacity 900ms var(--ease-out), transform 1100ms var(--ease-out);
+}
+.intro-pending .hero__title .line > span {
+  transform: translateY(112%);
+}
+.intro-pending [data-intro] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.intro-pending .hero__visual {
+  opacity: 0;
+  transform: scale(1.04);
+}
+
+/* ------------------------------------------------------------ signature tiles */
+.sig__head {
+  display: grid;
+  gap: 20px;
+  margin-bottom: clamp(28px, 4.5vw, 64px);
+}
+@media (min-width: 900px) {
+  .sig__head {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: end;
+    gap: clamp(32px, 6vw, 96px);
+  }
+}
+.sig__side {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+}
+.sig__side .statement {
+  max-width: 22em;
+}
+
+/* Phones and tablets: an accordion of tiles. A thumbnail row opens into the full tile. */
+.spanels {
+  display: grid;
+  gap: 14px;
+}
+.spanel {
+  position: relative;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+.spanel__media {
+  display: none;
+}
+.spanel__head {
+  font-size: inherit;
+}
+.spanel__btn {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 92px;
+  padding: 14px 16px 14px 14px;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+}
+.spanel__thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.spanel__name {
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.625rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+}
+.spanel__plus {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--espresso);
+  color: var(--cream);
+  transition: transform 220ms var(--ease-out);
+}
+.spanel__btn:active .spanel__plus {
+  transform: scale(0.94);
+}
+.spanel[data-open='true'] .spanel__plus {
+  transform: rotate(45deg);
+}
+.spanel__body {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 300ms var(--ease-out), opacity 200ms ease;
+}
+.spanel[data-open='true'] .spanel__body {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+.spanel__inner {
+  min-height: 0;
+  overflow: hidden;
+}
+.spanel__content {
+  display: grid;
+  gap: 10px;
+  padding: 2px 14px 18px;
+}
+.spanel__bodymedia {
+  aspect-ratio: 16 / 9;
+  max-height: 320px;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.spanel__desc {
+  font-size: var(--t-m);
+  line-height: 1.4;
+}
+.spanel__price {
+  font-weight: 600;
+}
+.spanel__note {
+  font-size: var(--t-xs);
+  color: var(--fg-soft);
+}
+
+/* Desktop: a row of tall tiles. Clicking one widens it and reveals its details; the others make room. */
+@media (min-width: 900px) {
+  .spanels {
+    display: flex;
+    gap: var(--gap);
+    height: clamp(520px, 68svh, 640px);
+  }
+  .spanel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow 320ms var(--ease-out);
+  }
+  .spanel[data-open='true'] {
+    flex-grow: 2.4;
+  }
+  .spanel__media {
+    display: block;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+  .spanel__thumb,
+  .spanel__bodymedia {
+    display: none;
+  }
+  .spanel__btn {
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-height: 96px;
+    padding: 18px 18px 18px 24px;
+  }
+  .spanel__content {
+    padding: 0 24px 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spanel,
+  .spanel__body,
+  .spanel__plus {
+    transition-duration: 1ms;
+  }
+}
+
+/* ------------------------------------------------------------ story teaser (light, so the dark footer stands alone) */
+.teaser__grid {
+  display: grid;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .teaser__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+.teaser__text {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+}
+.teaser__text .statement {
+  max-width: 24em;
+}
+.teaser__art {
+  display: grid;
+  place-items: center;
+  padding: clamp(24px, 5vw, 64px);
+  border-radius: var(--radius-lg);
+  background: var(--espresso);
+}
+.js .teaser__art:not(.is-in) .steam.draw {
+  stroke-dashoffset: 1;
+}
+.teaser__art .steam.draw {
+  stroke-dasharray: 1;
+}
+.teaser__art.is-in .steam.draw {
+  animation: draw 900ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 140ms + 200ms);
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .teaser__art.is-in .steam.draw {
+    animation: none;
+  }
+}
+
+/* Narrow desktop tiles: keep names compact so placeholders like [CONFIRM: cake name] stay tidy. */
+@media (min-width: 900px) {
+  .spanel__name {
+    font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+  }
+  .spanel__name .confirm {
+    font-size: 0.7em;
+    white-space: normal;
+  }
+  .spanel__media .ph {
+    object-fit: cover;
+  }
+}

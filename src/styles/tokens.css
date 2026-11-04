@@ -1,0 +1,69 @@
+/* Design tokens. Palette is sampled from the logo: cream paper + espresso ink.
+   One accent (caramel) is used for actions and the "open" signal only. */
+:root {
+  /* colour */
+  --cream: #f4f1e0;
+  --cream-2: #ece8d2; /* tone step, never a line */
+  --cream-3: #e0dbc1;
+  --espresso: #362618;
+  --espresso-2: #44311f;
+  --espresso-3: #5a4430;
+  --caramel: #d9923e;
+  --caramel-deep: #b9772c;
+
+  /* type: two faces, five sizes */
+  --font-display: 'Young Serif', Georgia, 'Times New Roman', serif;
+  --font-body: 'Figtree Variable', 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --t-xs: 0.875rem;
+  --t-s: 1rem;
+  --t-m: clamp(1.125rem, 1.02rem + 0.5vw, 1.375rem);
+  --t-l: clamp(1.875rem, 1.2rem + 3vw, 3.25rem);
+  --t-xl: clamp(2.75rem, 1.2rem + 7.4vw, 6.25rem);
+
+  /* space */
+  --gutter: clamp(16px, 4vw, 40px);
+  --section: clamp(88px, 13vw, 200px);
+  --header-h: calc(64px + env(safe-area-inset-top, 0px));
+
+  /* motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* field defaults (light) */
+  --bg: var(--cream);
+  --fg: var(--espresso);
+  --fg-soft: color-mix(in srgb, var(--espresso) 74%, var(--cream));
+  --surface: var(--cream-2);
+  --surface-2: var(--cream-3);
+  --focus: var(--espresso);
+  --mark-bg: color-mix(in srgb, var(--caramel) 40%, var(--cream));
+  --mark-fg: var(--espresso);
+}
+
+.field--light {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.field--tone {
+  --bg: var(--cream-2);
+  --surface: var(--cream-3);
+  --surface-2: color-mix(in srgb, var(--cream-3) 80%, var(--espresso));
+  --mark-bg: color-mix(in srgb, var(--caramel) 44%, var(--cream-2));
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.field--dark {
+  --bg: var(--espresso);
+  --fg: var(--cream);
+  --fg-soft: color-mix(in srgb, var(--cream) 78%, var(--espresso));
+  --surface: var(--espresso-2);
+  --surface-2: var(--espresso-3);
+  --focus: var(--caramel);
+  --mark-bg: color-mix(in srgb, var(--caramel) 34%, var(--espresso));
+  --mark-fg: var(--cream);
+  background: var(--bg);
+  color: var(--fg);
+}

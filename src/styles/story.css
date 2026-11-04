@@ -1,0 +1,296 @@
+/* Our Story: five chapters on one sticky stage. Scroll position drives the chapter and the line drawing.
+   Without motion (prefers-reduced-motion) the chapters simply stack. */
+
+.story {
+  position: relative;
+  margin-top: calc(var(--header-h) * -1);
+  background: var(--espresso);
+}
+.story__track {
+  height: calc((var(--n) + 1) * 100svh);
+}
+.story__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  padding-top: var(--header-h);
+}
+
+/* Drawn placeholder for the real photograph, kept dark so text stays readable. */
+.story__bg {
+  position: absolute;
+  inset: 0;
+}
+.sb {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.sb-wall {
+  fill: #2a1d13;
+}
+.sb-win {
+  fill: #3a2a1b;
+}
+.sb-wire {
+  stroke: var(--espresso-3);
+}
+.sb-halo {
+  fill: var(--caramel);
+  opacity: 0.16;
+}
+.sb-bulb {
+  fill: var(--caramel);
+}
+.sb-counter {
+  fill: #20160e;
+}
+.sb-top {
+  fill: #4a3622;
+}
+.sb-glass {
+  fill: var(--caramel);
+  opacity: 0.5;
+}
+.sb-dome {
+  fill: var(--cream);
+  opacity: 0.5;
+}
+.story__veil {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--espresso) 66%, transparent);
+}
+
+/* Progress */
+.story__hud {
+  position: absolute;
+  inset: calc(var(--header-h) + 6px) 0 auto 0;
+  z-index: 2;
+  display: grid;
+  gap: 4px;
+}
+.story__progress {
+  display: flex;
+  gap: 8px;
+}
+.seg {
+  position: relative;
+  flex: 1;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.seg::before,
+.seg__fill {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto 0;
+  height: 4px;
+  margin-top: -2px;
+  border-radius: 2px;
+}
+.seg::before {
+  background: color-mix(in srgb, var(--cream) 26%, transparent);
+}
+.seg__fill {
+  background: var(--caramel);
+  transform-origin: left;
+  transform: scaleX(var(--f, 0));
+}
+.story__label {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--cream);
+}
+.story__flags {
+  max-width: none;
+}
+.story__hud {
+  grid-template-columns: 1fr;
+}
+.story__label,
+.story__flags {
+  grid-column: 1;
+}
+@media (min-width: 900px) {
+  .story__hud {
+    grid-template-columns: 1fr auto;
+  }
+  .story__progress {
+    grid-column: 1 / -1;
+  }
+  .story__flags {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: end;
+  }
+}
+
+/* Chapters */
+.story__chapters {
+  position: absolute;
+  inset: calc(var(--header-h) + 100px) 0 calc(var(--bar-h) + 96px + env(safe-area-inset-bottom, 0px)) 0;
+  z-index: 1;
+}
+@media (min-width: 900px) {
+  .story__chapters {
+    inset-block: calc(var(--header-h) + 76px) 64px;
+  }
+}
+.chapter {
+  position: absolute;
+  inset: 0 max(var(--gutter), env(safe-area-inset-right, 0px)) 0 max(var(--gutter), env(safe-area-inset-left, 0px));
+  display: grid;
+  grid-template-areas: 'art' 'text';
+  grid-template-rows: minmax(0, 0.9fr) auto;
+  align-items: center;
+  gap: clamp(16px, 3vw, 32px);
+  pointer-events: none;
+}
+.chapter[data-state='active'] {
+  pointer-events: auto;
+}
+@media (min-width: 900px) {
+  .chapter {
+    grid-template-areas: 'text art';
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: clamp(32px, 6vw, 96px);
+  }
+}
+.chapter__art {
+  grid-area: art;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+.chapter__art .art {
+  max-height: 100%;
+}
+.chapter__text {
+  grid-area: text;
+  display: grid;
+  gap: clamp(14px, 2vw, 24px);
+  justify-items: start;
+}
+.chapter__text h2 {
+  font-size: clamp(2.25rem, 1rem + 5vw, 5rem);
+  max-width: 10em;
+}
+.chapter__text p {
+  max-width: 22em;
+  font-size: var(--t-m);
+  line-height: 1.45;
+}
+.chapter__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Direction-aware transition: the incoming chapter rises in, the outgoing one leaves upward. */
+.chapter__text,
+.chapter__art {
+  transition: opacity 520ms var(--ease-out), transform 620ms var(--ease-out);
+}
+.chapter[data-state='next'] .chapter__text {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.chapter[data-state='prev'] .chapter__text {
+  opacity: 0;
+  transform: translateY(-28px);
+}
+.chapter[data-state='next'] .chapter__art {
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+}
+.chapter[data-state='prev'] .chapter__art {
+  opacity: 0;
+  transform: translateY(-24px) scale(0.98);
+}
+
+/* Line drawing, scrubbed by --cp (0 to 1 across the chapter). Dotted paths stay as they are. */
+.js .chapter .art__ink path:not([stroke-dasharray]) {
+  stroke-dasharray: 1;
+  stroke-dashoffset: clamp(0, calc(1 - var(--cp, 0) * 2.6 + var(--i, 0) * 0.14), 1);
+}
+
+.story__bgnote {
+  position: absolute;
+  inset: auto 0 calc(var(--bar-h) + 12px + env(safe-area-inset-bottom, 0px)) 0;
+  z-index: 2;
+  font-size: 0.75rem;
+}
+.story__bgnote mark {
+  display: inline-block;
+  max-width: 52ch;
+}
+@media (min-width: 900px) {
+  .story__bgnote {
+    inset-block-end: 14px;
+  }
+}
+
+/* Reduced motion, or no script: chapters stack and everything is drawn. */
+@media (prefers-reduced-motion: reduce) {
+  .story__track {
+    height: auto;
+  }
+  .story__stage {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    padding-bottom: 96px;
+  }
+  .story__progress,
+  .story__label {
+    display: none;
+  }
+  .story__hud {
+    position: relative;
+    inset: auto;
+    padding-top: 16px;
+  }
+  .story__flags {
+    position: static;
+  }
+  .story__chapters {
+    position: relative;
+    inset: auto;
+    display: grid;
+    gap: clamp(72px, 12vw, 140px);
+    padding-top: 40px;
+  }
+  .chapter {
+    position: relative;
+    inset: auto;
+    pointer-events: auto;
+  }
+  .chapter .chapter__text,
+  .chapter .chapter__art {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
+  }
+  .story__bgnote {
+    position: relative;
+    inset: auto;
+    margin-top: 48px;
+  }
+  .story__bg,
+  .story__veil {
+    position: absolute;
+    inset: 0;
+  }
+  .story__stage > .story__bg {
+    height: 100%;
+  }
+  .story__chapters .art__ink path {
+    stroke-dashoffset: 0 !important;
+  }
+}

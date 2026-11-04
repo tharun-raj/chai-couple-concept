@@ -1,0 +1,206 @@
+/* Page heads (gallery and menu share this), masonry grid, lightbox. */
+
+.page-head {
+  padding-block: clamp(40px, 7vw, 104px) clamp(28px, 4vw, 56px);
+}
+.page-head__grid {
+  display: grid;
+  gap: 20px;
+  align-items: end;
+}
+@media (min-width: 900px) {
+  .page-head__grid {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    gap: clamp(32px, 6vw, 96px);
+  }
+}
+.page-head h1 {
+  font-size: clamp(2.75rem, 1rem + 6.4vw, 5.5rem);
+}
+
+/* ------------------------------------------------------------ masonry */
+.gallery {
+  padding-bottom: clamp(72px, 10vw, 160px);
+}
+.masonry {
+  columns: 1;
+  column-gap: var(--gap);
+}
+@media (min-width: 620px) {
+  .masonry {
+    columns: 2;
+  }
+}
+@media (min-width: 1000px) {
+  .masonry {
+    columns: 3;
+  }
+}
+.tile {
+  break-inside: avoid;
+  margin: 0 0 var(--gap);
+}
+.tile__btn {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: none;
+  overflow: hidden;
+  transition: transform 160ms var(--ease-out);
+}
+.tile__btn:active {
+  transform: scale(0.985);
+}
+.tile__btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--espresso);
+  opacity: 0;
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .tile__btn:hover::after {
+    opacity: 0.14;
+  }
+}
+.tile__note {
+  max-width: 44ch;
+  margin-top: 10px;
+  font-size: var(--t-xs);
+  line-height: 1.5;
+  color: var(--fg-soft);
+}
+.tile__note strong {
+  color: var(--fg);
+}
+
+/* ------------------------------------------------------------ lightbox */
+.lightbox {
+  width: 100%;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--espresso);
+  color: var(--cream);
+  overflow: hidden;
+}
+.lightbox::backdrop {
+  background: var(--espresso);
+}
+.lightbox[open] {
+  animation: lb-in 200ms var(--ease-out);
+}
+@keyframes lb-in {
+  from {
+    opacity: 0;
+  }
+}
+.lightbox__inner {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100%;
+  padding: env(safe-area-inset-top, 0px) max(var(--gutter), env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px)
+    max(var(--gutter), env(safe-area-inset-left, 0px));
+}
+.lightbox__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+.lightbox__count {
+  font-size: var(--t-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.lightbox__close,
+.round {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--espresso-3);
+  color: var(--cream);
+  transition: transform 120ms var(--ease-out), background-color 160ms ease, opacity 160ms ease;
+}
+.lightbox__close:active,
+.round:active {
+  transform: scale(0.94);
+}
+.round:disabled {
+  opacity: 0.35;
+}
+@media (hover: hover) and (pointer: fine) {
+  .lightbox__close:hover,
+  .round:not(:disabled):hover {
+    background: var(--espresso-2);
+  }
+}
+.lightbox__close span {
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  top: 23px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.lightbox__close span:first-child {
+  transform: rotate(45deg);
+}
+.lightbox__close span:last-child {
+  transform: rotate(-45deg);
+}
+.lightbox__stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  touch-action: pan-y;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.lightbox__media {
+  width: min(100%, calc((100dvh - 250px) * var(--ratio, 1)));
+  aspect-ratio: var(--ratio, 1);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  will-change: transform;
+}
+.lightbox__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding-block: 16px 20px;
+}
+.lightbox__title {
+  font-size: var(--t-m);
+}
+.lightbox__note {
+  max-width: 52ch;
+  margin-top: 6px;
+  font-size: var(--t-xs);
+  color: var(--fg-soft, color-mix(in srgb, var(--cream) 78%, var(--espresso)));
+}
+.lightbox__nav {
+  display: flex;
+  gap: 10px;
+  flex: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lightbox[open] {
+    animation: none;
+  }
+}

@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#362618" />
+  <meta name="color-scheme" content="light" />
+  <title>The Chai Couple · Chai and cake in Thammanam, Kochi</title>
+  <meta name="description" content="Irani-style chai, bun maska and cake in Thammanam, Kochi. Open Tuesday to Sunday, 4 to 10 pm. Concept design." />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <link rel="stylesheet" href="/src/styles/home.css" />
+  <link rel="icon" type="image/png" href="/assets/favicon-192.png" />
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.className = 'js';
+      var seen = false;
+      try { seen = !!sessionStorage.getItem('cc-intro'); } catch (e) {}
+      var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (seen || calm) { d.classList.add('intro-done'); }
+      else {
+        // Hide the hero parts only until the script plays the intro; never leave them hidden if it fails.
+        d.classList.add('intro-pending');
+        setTimeout(function () { d.classList.remove('intro-pending'); }, 2500);
+      }
+    })();
+  </script>
+</head>
+<body data-page="home">
+  <!--@header-->
+  <main id="main">
+    <!--@body-->
+  </main>
+  <!--@footer-->
+  <!--@bottombar-->
+  <script type="module" src="/src/pages/home.js"></script>
+</body>
+</html>
